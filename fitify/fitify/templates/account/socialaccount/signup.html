@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %} SignUp with Google {% endblock title %}
+{% block content %}
+{% load socialaccount %}
+<h2>Google Login</h2>
+<a href="{% provider_login_url "google" method="oauth2" %}?next=/">Login with Google</a>
+
+{% endblock content %} 

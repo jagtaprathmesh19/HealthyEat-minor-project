@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+*.venv
+env/
+venv/
+ENV/
+ENV.bak/
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# ReactJS
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+build/
+dist/
+.DS_Store
+
+# General
+*.swp
+*.swo
+*.bak
+*.tmp
+*.temp
+*.log
+.idea/
+.vscode/
+*.iml
+*.class
