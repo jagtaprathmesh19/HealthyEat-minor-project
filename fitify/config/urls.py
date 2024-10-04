@@ -1,4 +1,5 @@
 # ruff: noqa
+# This urls.py file is main entry point for all URL patterns in the project.
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin

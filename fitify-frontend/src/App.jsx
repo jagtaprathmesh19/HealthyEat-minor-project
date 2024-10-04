@@ -1,11 +1,9 @@
-import { useState } from "react";
+import SignInSide from "./SignInSide";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div className="bg-slate-800 h-screen"></div>
+      <SignInSide />
     </>
   );
 }
