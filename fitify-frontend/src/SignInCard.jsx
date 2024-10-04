@@ -7,7 +7,8 @@ import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Link from "@mui/material/Link";
+import MUILink from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
@@ -33,12 +34,15 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
+  const [nameError, setNameError] = useState(false);
+  const [nameErrorMessage, setNameErrorMessage] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
 
+  const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -52,6 +56,7 @@ export default function SignInCard() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const name = nameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
@@ -75,8 +80,18 @@ export default function SignInCard() {
       setPasswordErrorMessage("");
     }
 
+    if (!name || name.length < 1) {
+      setNameError(true);
+      setNameErrorMessage("Name is required.");
+      isValid = false;
+    } else {
+      setNameError(false);
+      setNameErrorMessage("");
+    }
+
     if (isValid) {
       console.log({
+        name,
         email,
         password,
       });
@@ -99,8 +114,30 @@ export default function SignInCard() {
         component="form"
         onSubmit={handleSubmit}
         noValidate
-        sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          gap: 2,
+        }}
       >
+        <FormControl>
+          <FormLabel htmlFor="name">Full name</FormLabel>
+          <TextField
+            autoComplete="name"
+            name="name"
+            required
+            fullWidth
+            autoFocus
+            id="name"
+            placeholder="Jon Snow"
+            error={nameError}
+            helperText={nameErrorMessage}
+            color={nameError ? "error" : "primary"}
+            inputRef={nameRef}
+            variant="outlined"
+          />
+        </FormControl>
         <FormControl>
           <FormLabel htmlFor="email">Email</FormLabel>
           <TextField
@@ -111,7 +148,6 @@ export default function SignInCard() {
             name="email"
             placeholder="your@email.com"
             autoComplete="email"
-            autoFocus
             required
             fullWidth
             variant="outlined"
@@ -140,7 +176,6 @@ export default function SignInCard() {
             type="password"
             id="password"
             autoComplete="current-password"
-            autoFocus
             required
             fullWidth
             variant="outlined"
@@ -159,13 +194,9 @@ export default function SignInCard() {
         <Typography sx={{ textAlign: "center" }}>
           Already have an account?{" "}
           <span>
-            <Link
-              href="/material-ui/getting-started/templates/sign-in/"
-              variant="body2"
-              sx={{ alignSelf: "center" }}
-            >
-              Sign In
-            </Link>
+            <MUILink variant="body2" sx={{ alignSelf: "center" }}>
+              <Link to="/signin">Sign In</Link>
+            </MUILink>
           </span>
         </Typography>
       </Box>
