@@ -26,9 +26,8 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_success_url(self) -> str:
         assert self.request.user.is_authenticated  # type guard
-        return self.request.user.get_absolute_url()
 
-    def get_object(self, queryset: QuerySet | None=None) -> User:
+    def get_object(self, queryset: QuerySet | None = None) -> User:
         assert self.request.user.is_authenticated  # type guard
         return self.request.user
 
@@ -39,8 +38,10 @@ user_update_view = UserUpdateView.as_view()
 class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
-    def get_redirect_url(self) -> str:
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
+    # def get_redirect_url(self) -> str:
+    #     return reverse(
+    #         "users:user-detail", kwargs={"username": self.request.user.username}
+    #     )
 
 
 user_redirect_view = UserRedirectView.as_view()

@@ -1,5 +1,7 @@
 # General
 # ------------------------------------------------------------------------------
+DJANGO_READ_DOT_ENV_FILE=True
+
 USE_DOCKER=True
 IPYTHONDIR=/app/.ipython
 # Redis
@@ -14,3 +16,4 @@ CELERY_BROKER_URL=redis://localhost:6379/0
 # Flower
 CELERY_FLOWER_USER=NLGJfWWwSDtqIqLIDOZnuNFpTGQxTmtc
 CELERY_FLOWER_PASSWORD=mSXiDKoPJl4lITQYisaCvREYxLPoPaS3u4B3NIlCvXMOMIzHZXOk8YL5RxVQZwuK
+

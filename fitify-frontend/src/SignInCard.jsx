@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
 import { GoogleIcon, SitemarkIcon } from "./CustomIcons";
+import axiosInstance from "./utils/axiosInstance";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -41,6 +42,7 @@ export default function SignInCard() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
@@ -62,6 +64,20 @@ export default function SignInCard() {
 
     let isValid = true;
 
+    setLoading(true);
+    try {
+      const response = axiosInstance.post("/accounts/signup/", {
+        name,
+        email,
+        password,
+      });
+      console.log("User signed up successfully:", response.data);
+    } catch (error) {
+      console.error("There was an error signing up!", error);
+    } finally {
+      setLoading(false);
+    }
+
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
@@ -71,9 +87,9 @@ export default function SignInCard() {
       setEmailErrorMessage("");
     }
 
-    if (!password || password.length < 6) {
+    if (!password || password.length < 8) {
       setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
+      setPasswordErrorMessage("Password must be at least 8 characters long.");
       isValid = false;
     } else {
       setPasswordError(false);
@@ -189,13 +205,18 @@ export default function SignInCard() {
         />
         <ForgotPassword open={open} handleClose={handleClose} />
         <Button type="submit" fullWidth variant="contained">
-          Sign Up
+          {loading ? "Signing in..." : "Sign in"}
         </Button>
         <Typography sx={{ textAlign: "center" }}>
           Already have an account?{" "}
           <span>
-            <MUILink variant="body2" sx={{ alignSelf: "center" }}>
-              <Link to="/signin">Sign In</Link>
+            <MUILink
+              component={Link}
+              to="/"
+              variant="body2"
+              sx={{ alignSelf: "center" }}
+            >
+              Sign In
             </MUILink>
           </span>
         </Typography>

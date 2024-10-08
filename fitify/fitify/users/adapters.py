@@ -15,7 +15,7 @@ if typing.TYPE_CHECKING:
 
 class AccountAdapter(DefaultAccountAdapter):
     def is_open_for_signup(self, request: HttpRequest) -> bool:
-        return getattr(settings, "ACCOUNT_ALLOW_REGISTRATION", True)
+        return False
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -46,3 +46,19 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
                 if last_name := data.get("last_name"):
                     user.name += f" {last_name}"
         return user
+
+    def pre_social_login(self, request: HttpRequest, sociallogin: SocialLogin):
+        # Check if a user with the same email exists
+        email = sociallogin.account.extra_data.get("email")
+        if email:
+            try:
+                existing_user = User.objects.get(email=email)
+                sociallogin.connect(request, existing_user)
+            except User.DoesNotExist:
+                pass
+
+    def get_login_redirect_url(
+        self, request: HttpRequest, sociallogin: SocialLogin
+    ) -> str:
+        # Redirect user to dashboard after login
+        return "/dashboard/"

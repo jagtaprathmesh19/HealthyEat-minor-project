@@ -18,6 +18,7 @@ import ForgotPassword from "./ForgotPassword";
 import { GoogleIcon, SitemarkIcon } from "./CustomIcons";
 import AppTheme from "./AppTheme";
 import ColorModeSelect from "./ColorModeSelect";
+import axiosInstance from "./utils/axiosInstance";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -66,7 +67,7 @@ export default function SignIn(props) {
     password: { error: false, message: "" },
   });
   const [open, setOpen] = React.useState(false);
-
+  const [loading, setLoading] = React.useState(false);
   const emailRef = React.useRef(null);
   const passwordRef = React.useRef(null);
 
@@ -78,14 +79,27 @@ export default function SignIn(props) {
     setOpen(false);
   }, []);
 
-  const handleSubmit = React.useCallback((event) => {
+  const handleSubmit = React.useCallback(async (event) => {
     event.preventDefault();
     if (validateInputs()) {
-      const data = new FormData(event.currentTarget);
-      console.log({
-        email: data.get("email"),
-        password: data.get("password"),
-      });
+      const data = {
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      };
+      setLoading(true);
+      try {
+        const response = await axiosInstance.post("/accounts/login/", data);
+        localStorage.setItem("authToken", response.data.key);
+        alert("Login successful");
+      } catch (error) {
+        console.error("Login Failed", error);
+        setErrors({
+          email: { error: true, message: "Invalid credentials" },
+          password: { error: true, message: "Invalid credentials" },
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   }, []);
 
@@ -198,14 +212,25 @@ export default function SignIn(props) {
               label="Remember me"
             />
             <ForgotPassword open={open} handleClose={handleClose} />
-            <Button type="submit" fullWidth variant="contained">
-              Sign in
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              // disabled={loading}
+              className={loading ? "text-blue-700" : ""}
+            >
+              {loading ? "Signing in..." : "Sign in"}
             </Button>
             <Typography sx={{ textAlign: "center" }}>
               Don&apos;t have an account?{" "}
               <span>
-                <MUILink variant="body2" sx={{ alignSelf: "center" }}>
-                  <Link to="/signup">Sign up</Link>
+                <MUILink
+                  component={Link}
+                  to="/signup"
+                  variant="body2"
+                  sx={{ alignSelf: "center" }}
+                >
+                  Sign up
                 </MUILink>
               </span>
             </Typography>
