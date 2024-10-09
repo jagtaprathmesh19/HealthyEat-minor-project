@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.mixins import UpdateModelMixin
@@ -84,3 +85,11 @@ class UserLogoutAPIView(GenericViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
                 data={"error": str(error)},
             )
+
+
+class UserInformationAPIView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user

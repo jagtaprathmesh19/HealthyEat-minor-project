@@ -35,8 +35,8 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
-  const [nameError, setNameError] = useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = useState("");
+  const [usernameError, setUsernameError] = useState(false);
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
@@ -44,7 +44,7 @@ export default function SignInCard() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const nameRef = useRef(null);
+  const usernameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -58,7 +58,7 @@ export default function SignInCard() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const name = nameRef.current.value;
+    const username = usernameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
@@ -66,8 +66,8 @@ export default function SignInCard() {
 
     setLoading(true);
     try {
-      const response = axiosInstance.post("/accounts/signup/", {
-        name,
+      const response = axiosInstance.post("api/users/register/", {
+        username,
         email,
         password,
       });
@@ -96,18 +96,18 @@ export default function SignInCard() {
       setPasswordErrorMessage("");
     }
 
-    if (!name || name.length < 1) {
-      setNameError(true);
-      setNameErrorMessage("Name is required.");
+    if (!username || username.length < 1) {
+      setUsernameError(true);
+      setUsernameErrorMessage("Username is required.");
       isValid = false;
     } else {
-      setNameError(false);
-      setNameErrorMessage("");
+      setUsernameError(false);
+      setUsernameErrorMessage("");
     }
 
     if (isValid) {
       console.log({
-        name,
+        username,
         email,
         password,
       });
@@ -138,19 +138,19 @@ export default function SignInCard() {
         }}
       >
         <FormControl>
-          <FormLabel htmlFor="name">Full name</FormLabel>
+          <FormLabel htmlFor="username">Username</FormLabel>
           <TextField
-            autoComplete="name"
-            name="name"
+            autoComplete="username"
+            username="username"
             required
             fullWidth
             autoFocus
-            id="name"
+            id="username"
             placeholder="Jon Snow"
-            error={nameError}
-            helperText={nameErrorMessage}
-            color={nameError ? "error" : "primary"}
-            inputRef={nameRef}
+            error={usernameError}
+            helperText={usernameErrorMessage}
+            color={usernameError ? "error" : "primary"}
+            inputRef={usernameRef}
             variant="outlined"
           />
         </FormControl>
@@ -161,7 +161,7 @@ export default function SignInCard() {
             helperText={emailErrorMessage}
             id="email"
             type="email"
-            name="email"
+            username="email"
             placeholder="your@email.com"
             autoComplete="email"
             required
@@ -187,7 +187,7 @@ export default function SignInCard() {
           <TextField
             error={passwordError}
             helperText={passwordErrorMessage}
-            name="password"
+            username="password"
             placeholder="••••••"
             type="password"
             id="password"
@@ -212,7 +212,7 @@ export default function SignInCard() {
           <span>
             <MUILink
               component={Link}
-              to="/"
+              to="/login"
               variant="body2"
               sx={{ alignSelf: "center" }}
             >
