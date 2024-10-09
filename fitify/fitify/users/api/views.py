@@ -62,14 +62,23 @@ class UserLoginAPIView(GenericViewSet):
 
 
 class UserLogoutAPIView(GenericViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [AllowAny]
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         try:
-            refresh_token = request.data["refresh"]
+            refresh_token = request.data.get("refresh")
+
+            if not refresh_token:
+                return Response(
+                    {"error": "Refresh token is required."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
             token = RefreshToken(refresh_token)
             token.blacklist()
+
             return Response(status=status.HTTP_205_RESET_CONTENT)
+
         except Exception as error:  # noqa: BLE001
             return Response(
                 status=status.HTTP_400_BAD_REQUEST,

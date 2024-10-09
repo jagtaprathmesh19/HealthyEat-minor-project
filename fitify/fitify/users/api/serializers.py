@@ -20,14 +20,6 @@ class UserRegisterationSerilizer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        # password = validated_data.pop("password")
-        # user = User(
-        #     username=validated_data["username"],
-        #     email=validated_data["email"],
-        #     name=validated_data["name"],
-        # )
-        # user.set_password(password)
-        # user.save()
         return User.objects.create_user(**validated_data)
 
     def validate_email(self, value):
