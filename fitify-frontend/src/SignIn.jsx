@@ -16,8 +16,8 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
 import { GoogleIcon, SitemarkIcon } from "./CustomIcons";
-import AppTheme from "./AppTheme";
-import ColorModeSelect from "./ColorModeSelect";
+import AppTheme from "./theme/AppTheme";
+import ColorModeSelect from "./theme/ColorModeSelect";
 import axiosInstance from "./utils/axiosInstance";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -88,8 +88,9 @@ export default function SignIn(props) {
       };
       setLoading(true);
       try {
-        const response = await axiosInstance.post("/accounts/login/", data);
-        localStorage.setItem("authToken", response.data.key);
+        const response = await axiosInstance.post("/api/users/login/", data);
+        localStorage.setItem("accessToken", response.data.token.access);
+        localStorage.setItem("refreshToken", response.data.token.refresh);
         alert("Login successful");
       } catch (error) {
         console.error("Login Failed", error);
@@ -226,7 +227,7 @@ export default function SignIn(props) {
               <span>
                 <MUILink
                   component={Link}
-                  to="/signup"
+                  to="/register"
                   variant="body2"
                   sx={{ alignSelf: "center" }}
                 >

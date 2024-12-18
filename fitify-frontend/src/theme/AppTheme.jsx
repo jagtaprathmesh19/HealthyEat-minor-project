@@ -2,17 +2,12 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-import { inputsCustomizations } from "./theme/customizations/inputs";
-import { dataDisplayCustomizations } from "./theme/customizations/dataDisplay";
-import { feedbackCustomizations } from "./theme/customizations/feedback";
-import { navigationCustomizations } from "./theme/customizations/navigation";
-import { surfacesCustomizations } from "./theme/customizations/surfaces";
-import {
-  colorSchemes,
-  typography,
-  shadows,
-  shape,
-} from "./theme/themePrimitives";
+import { inputsCustomizations } from "./customizations/inputs";
+import { dataDisplayCustomizations } from "./customizations/dataDisplay";
+import { feedbackCustomizations } from "./customizations/feedback";
+import { navigationCustomizations } from "./customizations/navigation";
+import { surfacesCustomizations } from "./customizations/surfaces";
+import { colorSchemes, typography, shadows, shape } from "./themePrimitives";
 
 const AppTheme = ({
   children,
